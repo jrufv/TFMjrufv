@@ -1,0 +1,29 @@
+Package: TFMjrufv
+Title: Framework para el análisis de datos ómicos
+Version: 0.0.0.9000
+Authors@R: 
+    person(given = "Jordi",
+           family = "Ruf",
+           role = c("aut", "cre"),
+           email = "jordiruf@gmail.com",
+           comment = c(ORCID = "YOUR-ORCID-ID"))
+Description: Este paquete pretende convertirse en una herramienta para manipular y procesar
+    datos ómicos de cualquier naturaleza para poderles aplicar diferentes tipos de análisis
+    estadísticos, como análisis de expresión diferencial, clasificación, detección de clusters
+    o selección de características.
+License: `use_mit_license()`, `use_gpl3_license()` or friends to pick a
+    license
+Encoding: UTF-8
+LazyData: true
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.1.1
+biocViews:
+Imports: 
+    BiocManager,
+    ggplot2,
+    ggrepel,
+    gplots,
+    grDevices,
+    pheatmap,
+    RColorBrewer,
+    reshape
