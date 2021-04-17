@@ -59,7 +59,8 @@ objetos del tipo \code{OnDiskMSnExp} o \code{MSnExp}.
 data_MetabRS <- prep_metRS(data_MetabRS,
                            fCPmethod = c("centWave", "centWavewpi",
                            "matchedFilter", "massifquant", "MSW"),
-                           refineRT = TRUE, refineIn = TRUE, refineMN = TRUE,
+                           refineRT = TRUE, refineIn = TRUE,
+                           refineMN = TRUE,
                            aRtmethod = c("peakGroups", "obiwarp"),
                            gCPmethod = c("density", "mzClust", "nearest"),
                            fillCP = TRUE, fillmethod = c("fill", "area"))
