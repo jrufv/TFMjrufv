@@ -38,7 +38,7 @@ son: \code{"none"}, \code{"half_min"}, \code{"median"}, \code{"mean"},
 \code{"log_pareto"}.}
 
 \item{oumethod}{Método de detección de outliers. Las opciones son
-\code{median} y \code{centroid}.}
+\code{"median"} y \code{"centroid"}.}
 
 \item{ditype}{Tipo de medida de distancia. Las opciones son
 \code{"euclidean"}, \code{"maximum"}, \code{"manhattan"}, \code{"canberra"}
