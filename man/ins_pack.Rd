@@ -13,8 +13,8 @@ ins_pack(annot_pack = NULL)
 
 }
 \description{
-Instalación y carga los paquetes de Bioconductor necesarios para el correcto
-funcionamiento del paquete en caso de que no lo estuvieran
+Instala y carga los paquetes de Bioconductor necesarios para el correcto
+funcionamiento del paquete en caso de que no lo estuvieran.
 }
 \examples{
 ins_pack()
