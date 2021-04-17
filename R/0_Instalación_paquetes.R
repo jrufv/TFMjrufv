@@ -1,7 +1,7 @@
 #' Instalación de paquetes de Bioconductor
 #'
-#' Instalación y carga los paquetes de Bioconductor necesarios para el correcto
-#' funcionamiento del paquete en caso de que no lo estuvieran
+#' Instala y carga los paquetes de Bioconductor necesarios para el correcto
+#' funcionamiento del paquete en caso de que no lo estuvieran.
 #' @param annot_pack Paquete de anotaciones para los datos del análisis.
 #' @return
 #' @export
