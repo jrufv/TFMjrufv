@@ -34,10 +34,11 @@
 #'   segundo solo genera el objeto y se accede a los datos sin procesar en el
 #'   disco cuando es necesario (sólo válido para \code{data_type = "MetabRS"}).
 #' @return Un objeto de la clase \code{ExpressionFeatureSet} (para microarrays),
-#'   \code{DGEList} (para RNA-Seq), \code{OnDiskMSnExp} (para espectros brutos
-#'   de GC/LC-MS), \code{SummarizedExperiment} (para contenedores de espectros
-#'   de MS/NMR), o \code{MSnSet} (para concentraciones de metabolitos) que
-#'   contiene los datos de los ensayos y datos sobre las muestras.
+#'   \code{DGEList} (para RNA-Seq), \code{OnDiskMSnExp} o \code{MSnExp} (para
+#'   espectros brutos de GC/LC-MS), \code{SummarizedExperiment} (para
+#'   contenedores de espectros de MS/NMR), o \code{MSnSet} (para concentraciones
+#'   de metabolitos) que contiene los datos de los ensayos y datos sobre las
+#'   muestras.
 #' @export
 #' @examples
 #' # Para microarrays
@@ -52,7 +53,7 @@
 #'                          raw_data = "./data/RNA-Seq/counts.csv",
 #'                          sep_rd = "\t",
 #'                          targets = "./data/RNA-Seq/targets.csv",
-#'                          sep_targ = ";")
+#'                          sep_targ = ",")
 #' data_RNASeq
 #'
 #' # Para Espectros Brutos de GC/LC-MS
@@ -81,7 +82,7 @@
 #' data_MetabMC
 
 read_data <- function(data_type, path, file_type, raw_data, sep_rd = "",
-                      targets, sep_targ = "", mode = "inMemory") {
+                      targets, sep_targ = "", mode = "onDisk") {
 
   if(missing(data_type)) stop("argument data_type is missing, with no default")
   if(data_type != "microarray" & data_type != "RNA-Seq" & data_type != "MetabRS" &
@@ -115,7 +116,7 @@ read_data <- function(data_type, path, file_type, raw_data, sep_rd = "",
     sampleinfo <- read.table(targets, header = TRUE, sep = sep_targ,
                              stringsAsFactors = TRUE)
     if(ncol(sampleinfo) < min_col) {
-      stop("the number of columns of the targets object must be greater than 1")
+      stop("Insufficient sample information")
     }
   }
 
@@ -126,20 +127,19 @@ read_data <- function(data_type, path, file_type, raw_data, sep_rd = "",
                                                    row.names = 1, sep = sep_targ)
     min_col <- 2
     if(ncol(sampleinfo) < min_col) {
-      stop("the number of columns of the targets object must be greater than 2")
+      stop("Insufficient sample information")
     }
     data <- oligo::read.celfiles(files, phenoData = sampleinfo)
-    sampleinfo@data[,1] -> rownames(pData(data))
-    colnames(data) <- rownames(pData(data))
+    sampleinfo@data[,1] -> rownames(Biobase::pData(data))
+    colnames(data) <- rownames(Biobase::pData(data))
 
   } else if(data_type == "RNA-Seq") {
 
-    colnames(file) <- sampleinfo[,2]
-    if(ncol(sampleinfo) == min_col+1) {
-      data <- edgeR::DGEList(file, group = sampleinfo[,3])
+    if(ncol(sampleinfo) == min_col) {
+      data <- edgeR::DGEList(file, group = sampleinfo[,2])
     } else {
-      data <- edgeR::DGEList(file, group = sampleinfo[,3],
-                             samples = sampleinfo[,4:ncol(sampleinfo)])
+      data <- edgeR::DGEList(file, group = sampleinfo[,2],
+                             samples = sampleinfo[,3:ncol(sampleinfo)])
     }
 
   } else if(data_type == "MetabRS") {
@@ -148,14 +148,13 @@ read_data <- function(data_type, path, file_type, raw_data, sep_rd = "",
     data <- MSnbase::readMSData(files = files,
                                 pdata = new("NAnnotatedDataFrame", sampleinfo),
                                 mode = mode)
-    sampleinfo[,2] -> rownames(pData(data))
+    sampleinfo[,2] -> rownames(Biobase::pData(data))
 
   } else if(data_type == "MetabPL") {
 
     stop("en contstrucción")
 
   } else if(data_type == "MetabSB") {
-
 
     rdata <- S4Vectors::DataFrame(row.names = rownames(file))
     cdata <- S4Vectors::DataFrame(sampleinfo[2:ncol(sampleinfo)],
