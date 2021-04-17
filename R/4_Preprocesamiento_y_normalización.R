@@ -22,7 +22,7 @@
 prep_norm_microarray <- function(object, varFilter = TRUE, featureFilter = TRUE,
                                  annot_pack = NULL, ...) {
 
-  dir.create("ProcessedData")
+  dir.create("Results", showWarnings = FALSE)
 
   if(class(object) != "ExpressionFeatureSet") {
     stop("class object must be ExpressionFeatureSet")
@@ -35,7 +35,7 @@ prep_norm_microarray <- function(object, varFilter = TRUE, featureFilter = TRUE,
   if(featureFilter == TRUE & is.null(annot_pack) == TRUE) {
     stop("must enter an annotations database")
   } else if(featureFilter == TRUE & is.null(annot_pack) == FALSE) {
-    annotation(norm_obj) <- annot_pack
+    BiocGenerics::annotation(norm_obj) <- annot_pack
   }
 
   if(varFilter == TRUE & featureFilter == TRUE) {
@@ -56,9 +56,13 @@ prep_norm_microarray <- function(object, varFilter = TRUE, featureFilter = TRUE,
 
   } else data <- norm_obj
 
-  # Guardar datos
+  # Guardar datos de expresión y objeto
   write.csv(exprs(data),
-            file = paste0("./ProcessedData/proc_data_", Sys.time(), ".csv"))
+            file = paste0("./Results/norm_data_microarray_", Sys.time(), ".csv"))
+
+  Biobase::pData(data) <- Biobase::pData(data)[2:ncol(Biobase::pData(data))]
+
+  save(data, file = paste0("./Results/norm_data_microarray_", Sys.time(), ".RData"))
 
   return(data)
 
@@ -82,7 +86,7 @@ prep_norm_microarray <- function(object, varFilter = TRUE, featureFilter = TRUE,
 
 prep_norm_rna <- function(object, usFilter = TRUE, ...) {
 
-  dir.create("ProcessedData")
+  dir.create("Results", showWarnings = FALSE)
 
   if(class(object) != "DGEList") stop("class object must be DGEList")
 
@@ -97,9 +101,17 @@ prep_norm_rna <- function(object, usFilter = TRUE, ...) {
   # Normalización
   data <- edgeR::calcNormFactors(filt_obj)
 
-  # Guardar datos
+  # Guardar datos de expresión
   write.csv(data$counts,
-            file = paste0("./ProcessedData/proc_data_", Sys.time(), ".csv"))
+            file = paste0("./Results/norm_data_RNASeq_", Sys.time(), ".csv"))
+
+  # Generar objeto ExpressionSet
+  data <- Biobase::ExpressionSet(assayData = data$counts,
+                                 phenoData = Biobase::AnnotatedDataFrame(data$samples))
+  varLabels(data)[1] <- "Group"
+
+  # Guardar objeto
+  save(data, file = paste0("./Results/norm_data_RNASeq_", Sys.time(), ".RData"))
 
   return(data)
 
@@ -137,7 +149,8 @@ prep_norm_rna <- function(object, usFilter = TRUE, ...) {
 #' data_MetabRS <- prep_metRS(data_MetabRS,
 #'                            fCPmethod = c("centWave", "centWavewpi",
 #'                            "matchedFilter", "massifquant", "MSW"),
-#'                            refineRT = TRUE, refineIn = TRUE, refineMN = TRUE,
+#'                            refineRT = TRUE, refineIn = TRUE,
+#'                            refineMN = TRUE,
 #'                            aRtmethod = c("peakGroups", "obiwarp"),
 #'                            gCPmethod = c("density", "mzClust", "nearest"),
 #'                            fillCP = TRUE, fillmethod = c("fill", "area"))
@@ -147,7 +160,7 @@ prep_metRS <- function(object, fCPmethod = NULL, refineRT = FALSE, refineIn = FA
                        refineMN = FALSE, aRtmethod = NULL, gCPmethod = NULL,
                        fillCP = FALSE, fillmethod = NULL, ...) {
 
-  dir.create("ProcessedData")
+  dir.create("Results", showWarnings = FALSE)
 
   if(class(object) != "OnDiskMSnExp" & class(object) != "MSnExp") {
     stop("class object must be OnDiskMSnExp or MSnExp")
@@ -216,7 +229,7 @@ prep_metRS <- function(object, fCPmethod = NULL, refineRT = FALSE, refineIn = FA
   } else stop("chosen method is not valid")
 
   # Correspondencia
-  Groups <- as.character(Biobase::pData(object)[3][,1])
+  Groups <- as.character(Biobase::pData(object)[[3]])
   if(gCPmethod == "density") {
     corr_method <- xcms::PeakDensityParam(sampleGroups = Groups)
   } else if(gCPmethod == "nzClust") {
@@ -240,16 +253,19 @@ prep_metRS <- function(object, fCPmethod = NULL, refineRT = FALSE, refineIn = FA
                                  param = fill_method)
   } else data <- corr_alig_refi_find_obj
 
-  # Guardar datos
+  # Guardar datos de expresión
   data_save <- xcms::featureValues(data)
-  colnames(data_save) <- as.character(Biobase::pData(data)[2][,1])
+  colnames(data_save) <- Biobase::pData(data)[[2]]
   write.csv(data_save,
-            file = paste0("./ProcessedData/proc_data_", Sys.time(), ".csv"))
+            file = paste0("./Results/prep_data_MetabRS_", Sys.time(), ".csv"))
+
+  # Guardar objeto
+  save(data, file = paste0("./Results/prep_data_MetabRS_", Sys.time(), ".RData"))
 
   # Generar objeto MSnSet
-  feat <- t(data_save)
-  targ <- Biobase::pData(data)[3:ncol(Biobase::pData(data))]
-  data <- POMA::PomaMSnSetClass(target = targ, features = feat)
+  data <- MSnbase::quantify(data)
+  data <- as(data, "MSnSet")
+  Biobase::pData(data) <- Biobase::pData(data)[3:ncol(Biobase::pData(data))]
 
   return(data)
 
@@ -299,7 +315,7 @@ prep_metSB <- function(object, filterMV = TRUE, filterF = TRUE, filterRSD = TRUE
                        QClab = NULL, mrsd = NULL, mfc = NULL, Blab = NULL,
                        remB = TRUE, fib = 0) {
 
-  dir.create("ProcessedData")
+  dir.create("Results", showWarnings = FALSE)
 
   if(class(object) != "SummarizedExperiment") {
     stop("class object must be SummarizedExperiment")
@@ -345,9 +361,9 @@ prep_metSB <- function(object, filterMV = TRUE, filterF = TRUE, filterRSD = TRUE
     }
 
     filF_fimv_obj <- pmp::filter_peaks_by_fraction(fimv_obj, min_frac = mf,
-                                                     classes = Groups,
-                                                     method = fFmethod,
-                                                     qc_label = QClab)
+                                                   classes = Groups,
+                                                   method = fFmethod,
+                                                   qc_label = QClab)
 
   } else filF_fimv_obj <- fimv_obj
 
@@ -384,14 +400,13 @@ prep_metSB <- function(object, filterMV = TRUE, filterF = TRUE, filterRSD = TRUE
 
   # Guardar datos
   write.csv(SummarizedExperiment::assay(data),
-            file = paste0("./ProcessedData/proc_data_", Sys.time(), ".csv"))
+            file = paste0("./Results/prep_data_MetabSB_", Sys.time(), ".csv"))
+
+  # Guardar objeto
+  save(data, file = paste0("./Results/prep_data_MetabSB_", Sys.time(), ".RData"))
 
   # Generar objeto MSnSet
-  data <- SummarizedExperiment::assay(data)
-  feat <- t(data)
-  sample <- data.frame(sample = rownames(SummarizedExperiment::colData(object)))
-  targ <- cbind(sample, SummarizedExperiment::colData(object))
-  data <- POMA:PomaMSnSetClass(features = feat, target = targ)
+  data <- as(data, "MSnSet")
 
   return(data)
 
@@ -418,7 +433,7 @@ prep_metSB <- function(object, filterMV = TRUE, filterF = TRUE, filterRSD = TRUE
 #'   \code{"log_scaling"}, \code{"log_transformation"}, \code{"vast_scaling"} y
 #'   \code{"log_pareto"}.
 #' @param oumethod Método de detección de outliers. Las opciones son
-#'   \code{median} y \code{centroid}.
+#'   \code{"median"} y \code{"centroid"}.
 #' @param ditype Tipo de medida de distancia. Las opciones son
 #'   \code{"euclidean"}, \code{"maximum"}, \code{"manhattan"}, \code{"canberra"}
 #'   y \code{"minkiowski"}.Vea \code{\link[stats]{dist}}.
@@ -437,7 +452,7 @@ met_imp_norm <- function(object, impute = TRUE, coff = 20, immethod = "none",
                          nomethod = "none", routliers = TRUE, oumethod = NULL,
                          ditype = "euclidean", ...) {
 
-  dir.create("ProcessedData")
+  dir.create("Results", showWarnings = FALSE)
 
   if(class(object) != "MSnSet") stop("class object must be MSnSet")
 
@@ -473,7 +488,13 @@ met_imp_norm <- function(object, impute = TRUE, coff = 20, immethod = "none",
 
   # Guardar datos
   write.csv(Biobase::exprs(data),
-            file = paste0("./ProcessedData/proc_data_", Sys.time(), ".csv"))
+            file = paste0("./Results/norm_Metab_", Sys.time(), ".csv"))
+
+  # Guardar objeto
+  save(data, file = paste0("./Results/norm_Metab_", Sys.time(), ".RData"))
+
+  # Generar objeto ExpressionSet
+  data <- as(data, "ExpressionSet")
 
   return(data)
 
