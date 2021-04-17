@@ -17,15 +17,16 @@
 #' @return Un gráfico distinto en función de la selección realizada.
 #' @export
 #' @examples
-#' plotTFM(data_microarray, plot = "boxplot")
+#' plotTFM(object, plot = c("PCA", "boxplot", "heatmap", "barplot", "BPC",
+#'                          "heatmapS", "density")
 
 plotTFM <- function (object, plot) {
 
   if(class(object) == "ExpressionFeatureSet") {
     dat_mat <- Biobase::exprs(object)
     Groups <- Biobase::pData(object)[[2]]
-    labels <- Biobase::pData(object)[[1]]
-    name <- Biobase::varLabels(Biobase::phenoData(object))[2]
+    labels <- Biobase::sampleNames(object)
+    name <- Biobase::varLabels(object)[2]
     lev <- levels(as.factor(Biobase::pData(object)[[2]]))
     title <- "Microarrays"
     value <- "Expression"
@@ -40,11 +41,11 @@ plotTFM <- function (object, plot) {
   } else if(class(object) == "OnDiskMSnExp" | class(object) ==  "MSnExp") {
     dat_mat <- matrix(MSnbase::tic(object), ncol = nrow(Biobase::pData(object)))
     colnames(dat_mat) <- rownames(Biobase::pData(object))
-    Groups <- Biobase::pData(object)[3][,1]
+    Groups <- as.character(Biobase::pData(object)[[3]])
     rownames(dat_mat) <- Biobase::featureNames(
       Biobase::featureData(object))[1:(length(MSnbase::tic(object))/length(Groups))]
     labels <- rownames(Biobase::pData(object))
-    name <- as.character(Biobase::pData(object)[2][,1])
+    name <- as.character(Biobase::pData(object)[[2]])
     lev <- levels(Biobase::pData(object)[[3]])
     title <- "Raw Spectra"
     value <- "Intensity"
@@ -53,14 +54,14 @@ plotTFM <- function (object, plot) {
     Groups <- as.character(SummarizedExperiment::colData(object)[[1]])
     labels <- colnames(object)
     name <- colnames(SummarizedExperiment::colData(object))
-    lev <- levels(as.data.frame(SummarizedExperiment::colData(object))[[1]])
+    lev <- levels(SummarizedExperiment::colData(object)[[1]])
     title <- "Spectra Bins"
     value <- "Intensity"
   } else if(class(object) == "MSnSet") {
     dat_mat <- Biobase::exprs(object)
     Groups <- as.character(Biobase::pData(object)[[1]])
-    labels <- Biobase::sampleNames(Biobase::phenoData(object))
-    name <- Biobase::varLabels(Biobase::phenoData(object))
+    labels <- Biobase::sampleNames(object)
+    name <- Biobase::varLabels(object)
     lev <- levels(Biobase::pData(object)[[1]])
     title <- "Metabolite Concentration"
     value <- "Concentration"
@@ -69,12 +70,12 @@ plotTFM <- function (object, plot) {
   datacpm <- edgeR::cpm(dat_mat, log = TRUE)
   meltdatacpm <- reshape::melt(datacpm)
   meltdatacpm <- data.frame(meltdatacpm, condition = cond_vect(object))
-  meltdatacpm <- meltdatacpm[, -1]
+  meltdatacpm <- meltdatacpm[,-1]
   names(meltdatacpm) <- c("samples", "value", "condition")
 
   meltdata <- reshape::melt(dat_mat)
   meltdata <- data.frame(meltdata, condition = cond_vect(object))
-  meltdata <- meltdata[, -1]
+  meltdata <- meltdata[,-1]
   names(meltdata) <- c("samples", "value", "condition")
 
   if(plot == "PCA") {
@@ -234,17 +235,17 @@ cond_vect <- function(object) {
 
   if(class(object) == "ExpressionFeatureSet") {
     datos <- Biobase::exprs(object)
-    grupos <- Biobase::pData(object)[2][,1]
+    grupos <- Biobase::pData(object)[[2]]
   } else if(class(object) == "DGEList") {
     datos <- object$counts
     grupos <- as.character(object$samples$group)
   } else if(class(object) == "OnDiskMSnExp" | class(object) ==  "MSnExp") {
     datos <- matrix(MSnbase::tic(object), ncol = nrow(Biobase::pData(object)))
     colnames(datos) <- rownames(Biobase::pData(object))
-    grupos <- as.character(Biobase::pData(object)[3][,1])
+    grupos <- as.character(Biobase::pData(object)[[3]])
   } else if(class(object) == "SummarizedExperiment") {
     datos <- SummarizedExperiment::assay(object)
-    grupos <- as.character(SummarizedExperiment::colData(object)[,1])
+    grupos <- as.character(SummarizedExperiment::colData(object)[[1]])
   } else if(class(object) == "MSnSet") {
     datos <- Biobase::exprs(object)
     grupos <- as.character(Biobase::pData(object)[[1]])
