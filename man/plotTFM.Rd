@@ -29,5 +29,6 @@ Acepta objetos del tipo \code{ExpressionFeatureSet}, \code{DGEList},
 \code{MSnSet}.
 }
 \examples{
-plotTFM(data_microarray, plot = "boxplot")
+plotTFM(object, plot = c("PCA", "boxplot", "heatmap", "barplot", "BPC",
+                         "heatmapS", "density")
 }
