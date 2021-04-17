@@ -12,7 +12,7 @@ read_data(
   sep_rd = "",
   targets,
   sep_targ = "",
-  mode = "inMemory"
+  mode = "onDisk"
 )
 }
 \arguments{
@@ -57,10 +57,11 @@ disco cuando es necesario (sólo válido para \code{data_type = "MetabRS"}).}
 }
 \value{
 Un objeto de la clase \code{ExpressionFeatureSet} (para microarrays),
-\code{DGEList} (para RNA-Seq), \code{OnDiskMSnExp} (para espectros brutos
-de GC/LC-MS), \code{SummarizedExperiment} (para contenedores de espectros
-de MS/NMR), o \code{MSnSet} (para concentraciones de metabolitos) que
-contiene los datos de los ensayos y datos sobre las muestras.
+\code{DGEList} (para RNA-Seq), \code{OnDiskMSnExp} o \code{MSnExp} (para
+espectros brutos de GC/LC-MS), \code{SummarizedExperiment} (para
+contenedores de espectros de MS/NMR), o \code{MSnSet} (para concentraciones
+de metabolitos) que contiene los datos de los ensayos y datos sobre las
+muestras.
 }
 \description{
 Lectura de diferentes tipos de archivos de datos ómicos y construcción de un
@@ -79,7 +80,7 @@ data_RNASeq <- read_data(data_type = "RNA-Seq",
                          raw_data = "./data/RNA-Seq/counts.csv",
                          sep_rd = "\t",
                          targets = "./data/RNA-Seq/targets.csv",
-                         sep_targ = ";")
+                         sep_targ = ",")
 data_RNASeq
 
 # Para Espectros Brutos de GC/LC-MS
