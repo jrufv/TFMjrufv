@@ -2,6 +2,7 @@
 
 export(col_vect)
 export(cond_vect)
+export(dea)
 export(ins_pack)
 export(met_imp_norm)
 export(ngroup)
