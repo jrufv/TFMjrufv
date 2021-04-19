@@ -23,7 +23,9 @@ Imports:
     ggplot2,
     ggrepel,
     gplots,
+    graphics,
     grDevices,
     pheatmap,
     RColorBrewer,
-    reshape
+    reshape,
+    utils
