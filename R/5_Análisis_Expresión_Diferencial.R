@@ -81,11 +81,9 @@ dea <- function(object, cont = NULL, name = NULL, maxanal = NULL, adjmethod = "B
     }
   }
 
-  # Construir matriz de diseño
+  # Construir matriz de diseño y la matriz de contrastes
   DM <- model.matrix(~ 0 + Group, Biobase::pData(object))
   colnames(DM) <- levels(as.factor(Biobase::pData(object)[[1]]))
-
-  # Construir matriz de contrastes
   CM <- limma::makeContrasts(contrasts = cont, levels = DM)
 
   if(is.null(name) == FALSE) {
@@ -93,19 +91,39 @@ dea <- function(object, cont = NULL, name = NULL, maxanal = NULL, adjmethod = "B
     cont <- name
   }
 
-  # Estimación del modelo y selección de analitos
-  fit <- limma::lmFit(object, DM)
+  # Identificación de analitos diferencialmente expresados
+  if(ncol(Biobase::pData(object)) > 1 & Biobase::varLabels(object)[2] == "lib.size") {
+
+    # Para datos de RNA-Seq
+    if(max(Biobase::pData(object)[2]) / min(Biobase::pData(object)[2]) < 3) {
+      logCPM <- edgeR::cpm(object, log = TRUE)
+      fit <- limma::lmFit(logCPM, DM)
+      fit.main <- limma::contrasts.fit(fit, CM)
+      istrend = TRUE
+    } else {
+      v <- limma::voom(object)
+      fit <- limma::lmFit(v, DM)
+      istrend = FALSE
+    }
+
+  } else {
+
+    # Para el resto
+    fit <- limma::lmFit(object, DM)
+    istrend = FALSE
+  }
+
   fit.main <- limma::contrasts.fit(fit, CM)
-  fit.main <- limma::eBayes(fit.main)
+  fit.eBayes <- limma::eBayes(fit.main, trend = istrend)
 
   # Obtener listas de analitos diferencialmente expresados
-  if(is.null(maxanal) == TRUE) maxanal <- nrow(fit.main)
+  if(is.null(maxanal) == TRUE) maxanal <- nrow(fit.eBayes)
 
   results <- list()
 
   for(i in 1:length(cont)) {
 
-    topTab <- limma::topTable(fit.main, coef = cont[i], number = maxanal,
+    topTab <- limma::topTreat(fit.eBayes, coef = cont[i], number = maxanal,
                               adjust.method = adjmethod,
                               p.value = pvalcoff)
     results[[i]] <- topTab
@@ -115,7 +133,7 @@ dea <- function(object, cont = NULL, name = NULL, maxanal = NULL, adjmethod = "B
   names(results) <- cont
 
   # Comparaciones múltiples
-  MC <- limma::decideTests(fit.main, method = dtmethod, adjust.method = adjmethod,
+  MC <- limma::decideTests(fit.eBayes, method = dtmethod, adjust.method = adjmethod,
                            p.value = pvalcoff)
   sum.MC.rows <- apply(abs(MC), 1, sum)
   MC.selected <- MC[sum.MC.rows != 0, ]
