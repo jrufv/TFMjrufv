@@ -260,7 +260,7 @@ cond_vect <- function(object) {
 
 #' Grupos experimentales
 #'
-#' Da el Número de grupos experimentales de objetos \code{ExpressionFeatureSet},
+#' Devuelve el número de grupos experimentales de objetos \code{ExpressionFeatureSet},
 #' \code{DGEList}, \code{OnDiskMSnExp}, \code{MSnExp},
 #' \code{SummarizedExperiment} y \code{MSnSet}.
 #' @param object Objeto.
