@@ -22,7 +22,7 @@ read_data(
 \item{path}{Ruta de ubicación de los archivos para \code{data_type =
 "microarray"} o \code{"MetabRS"}.}
 
-\item{file_type}{Tipo de archivos,  para \code{data_type = "MetabRS"}. Puede
+\item{file_type}{Tipo de archivos, para \code{data_type = "MetabRS"}. Puede
 ser \code{".NetCDF"}, \code{".mzML"}, \code{".mzXML"} o \code{".mzData"}.}
 
 \item{raw_data}{Ruta y nombre del archivo con los datos brutos del
