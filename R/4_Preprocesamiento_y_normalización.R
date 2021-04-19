@@ -92,9 +92,8 @@ prep_norm_rna <- function(object, usFilter = TRUE, ...) {
 
   # Filtraje no específico
   if(usFilter == TRUE) {
-    datacpm <- edgeR::cpm(object)
-    thresh <- datacpm > 1
-    keep <- rowSums(thresh) >= ncol(object$counts) / 2
+    keep <- edgeR::filterByExpr(object, min.count = 1,
+                                min.total.count = (ncol(object$counts) / 2))
     filt_obj <- object[keep,]
   } else filt_obj <- object
 
