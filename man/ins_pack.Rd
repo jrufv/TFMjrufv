@@ -7,7 +7,7 @@
 ins_pack(annot_pack = NULL)
 }
 \arguments{
-\item{annot_pack}{Paquete de anotaciones para los datos del análisis.}
+\item{annot_pack}{Paquetes de anotaciones para los datos del análisis.}
 }
 \value{
 
