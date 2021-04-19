@@ -6,7 +6,7 @@
 #'   \code{"RNA-Seq"}, \code{"MetabRS"}, \code{"MetabSB"} o \code{"MetabMC"}.
 #' @param path Ruta de ubicación de los archivos para \code{data_type =
 #'   "microarray"} o \code{"MetabRS"}.
-#' @param file_type Tipo de archivos,  para \code{data_type = "MetabRS"}. Puede
+#' @param file_type Tipo de archivos, para \code{data_type = "MetabRS"}. Puede
 #'   ser \code{".NetCDF"}, \code{".mzML"}, \code{".mzXML"} o \code{".mzData"}.
 #' @param raw_data Ruta y nombre del archivo con los datos brutos del
 #'   experimento, para \code{data_type = "RNA-Seq"}, \code{"MetabSB"} o
@@ -105,7 +105,7 @@ read_data <- function(data_type, path, file_type, raw_data, sep_rd = "",
   if(data_type == "RNA-Seq" | data_type == "MetabSB" | data_type == "MetabMC") {
     if(missing(raw_data)) stop("argument counts is missing, with no default")
 
-    file <- read.table(raw_data, header = TRUE, row.names = 1, sep = sep_rd)
+    file <- utils::read.table(raw_data, header = TRUE, row.names = 1, sep = sep_rd)
 
     min_col = 2
   }
@@ -113,8 +113,8 @@ read_data <- function(data_type, path, file_type, raw_data, sep_rd = "",
   if(missing(targets)) stop("argument targets is missing, with no default")
 
   if(data_type != "microarray") {
-    sampleinfo <- read.table(targets, header = TRUE, sep = sep_targ,
-                             stringsAsFactors = TRUE)
+    sampleinfo <- utils::read.table(targets, header = TRUE, sep = sep_targ,
+                                    stringsAsFactors = TRUE)
     if(ncol(sampleinfo) < min_col) {
       stop("Insufficient sample information")
     }
@@ -146,7 +146,7 @@ read_data <- function(data_type, path, file_type, raw_data, sep_rd = "",
 
     files <- list.files(path, recursive = TRUE, full.names = TRUE, pattern = file_type)
     data <- MSnbase::readMSData(files = files,
-                                pdata = new("NAnnotatedDataFrame", sampleinfo),
+                                pdata = methods::new("NAnnotatedDataFrame", sampleinfo),
                                 mode = mode)
     sampleinfo[,2] -> rownames(Biobase::pData(data))
 
