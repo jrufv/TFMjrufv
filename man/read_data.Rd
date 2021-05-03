@@ -7,6 +7,7 @@
 read_data(
   data_type,
   path,
+  gz_file = FALSE,
   file_type,
   raw_data,
   sep_rd = "",
@@ -21,6 +22,9 @@ read_data(
 
 \item{path}{Ruta de ubicación de los archivos para \code{data_type =
 "microarray"} o \code{"MetabRS"}.}
+
+\item{gz_file}{Lógico, si es \code{TRUE} se leerán archivos con extensión
+".CEL.gz")}
 
 \item{file_type}{Tipo de archivos, para \code{data_type = "MetabRS"}. Puede
 ser \code{".NetCDF"}, \code{".mzML"}, \code{".mzXML"} o \code{".mzData"}.}
