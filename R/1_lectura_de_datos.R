@@ -6,6 +6,8 @@
 #'   \code{"RNA-Seq"}, \code{"MetabRS"}, \code{"MetabSB"} o \code{"MetabMC"}.
 #' @param path Ruta de ubicación de los archivos para \code{data_type =
 #'   "microarray"} o \code{"MetabRS"}.
+#' @param gz_file Lógico, si es \code{TRUE} se leerán archivos con extensión
+#'   ".CEL.gz")
 #' @param file_type Tipo de archivos, para \code{data_type = "MetabRS"}. Puede
 #'   ser \code{".NetCDF"}, \code{".mzML"}, \code{".mzXML"} o \code{".mzData"}.
 #' @param raw_data Ruta y nombre del archivo con los datos brutos del
@@ -81,7 +83,7 @@
 #'                          sep_targ = ",")
 #' data_MetabMC
 
-read_data <- function(data_type, path, file_type, raw_data, sep_rd = "",
+read_data <- function(data_type, path, gz_file = FALSE, file_type, raw_data, sep_rd = "",
                       targets, sep_targ = "", mode = "onDisk") {
 
   if(missing(data_type)) stop("argument data_type is missing, with no default")
@@ -122,7 +124,7 @@ read_data <- function(data_type, path, file_type, raw_data, sep_rd = "",
 
   if(data_type == "microarray") {
 
-    files <- oligoClasses::list.celfiles(path, full.names = TRUE)
+    files <- oligoClasses::list.celfiles(path, full.names = TRUE, listGzipped = gz_file)
     sampleinfo <- Biobase::read.AnnotatedDataFrame(targets, header = TRUE,
                                                    row.names = 1, sep = sep_targ)
     min_col <- 2
