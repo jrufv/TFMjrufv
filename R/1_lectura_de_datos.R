@@ -83,7 +83,7 @@
 #'                          sep_targ = ",")
 #' data_MetabMC
 
-read_data <- function(data_type, path, gz_file = FALSE, file_type, raw_data, sep_rd = "",
+read_data <- function(data_type, path, gz_file, file_type, raw_data, sep_rd = "",
                       targets, sep_targ = "", mode = "onDisk") {
 
   if(missing(data_type)) stop("argument data_type is missing, with no default")
