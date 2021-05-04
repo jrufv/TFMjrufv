@@ -32,43 +32,43 @@
 #' @export
 #' @examples
 #' # Para los datos de microarrays.
-#' DEA_microarray <- dea(norm_data_microarray, cont = "Treated-Untreated",
+#' dea_microarray <- dea(norm_data_microarray, cont = "Treated-Untreated",
 #'                       name = "TRvsUN", maxanal = 1000, adjmethod = "fdr",
 #'                       pvalcoff = 0.1, dtmethod = "separate")
-#' DEA_microarray
+#' dea_microarray
 #'
 #' # Para los datos de RNASeq.
-#' DEA_RNASeq <- dea(norm_data_RNASeq, cont = "BCell-Kidney", name = "BCvsKi",
+#' dea_RNASeq <- dea(norm_data_RNASeq, cont = "BCell-Kidney", name = "BCvsKi",
 #'                   adjmethod = "BH", pvalcoff = 0.1, dtmethod = "global")
-#' DEA_RNASeq
+#' dea_RNASeq
 #'
 #' # Para los datos de GC/LC-MS RS.
-#' DEA_MetabRS <- dea(norm_data_MetabRS, cont = "CD-Control", name = "CDvsCon",
+#' dea_MetabRS <- dea(norm_data_MetabRS, cont = "CD-Control", name = "CDvsCon",
 #'                    adjmethod = "holm", pvalcoff = 0.1,
 #'                    dtmethod = "hierarchical")
-#' DEA_MetabRS
+#' dea_MetabRS
 #'
 #' # Para los datos de contendedores de espectros de MS/NMR (se crea un nuevo
 #' # grupo falso para mostrar el funcionamiento con 3 grupos experimentales).
 #' newgroups <- c(rep("patient", 15), rep("treated", 15), rep("control", 17))
 #' pData(norm_data_MetabSB)[1] <- newgroups
-#' DEA_MetabSB <- dea(norm_data_MetabSB, cont = c("patient-treated",
+#' dea_MetabSB <- dea(norm_data_MetabSB, cont = c("patient-treated",
 #'                    "patient-control", "treated-control"),
 #'                    name = c("PAvsTR", "PAvsCO", "TRvsCO"),
 #'                    adjmethod = "bonferroni", pvalcoff = 0.1,
 #'                    dtmethod = "nestedF")
-#' DEA_MetabSB
+#' dea_MetabSB
 #'
 #' # Para los datos de concentraciones de metabolitos (se crean nuevos grupos
 #' # falsos para mostrar el funcionamiento de la intersección).
 #' newgroups <- c(rep("cac.m", 21), rep("cac.w", 20),
 #'                rep("con.m", 15), rep("con.w", 15))
 #' pData(norm_data_MetabMC)[1] <- newgroups
-#' DEA_MetabMC <- dea(norm_data_MetabMC, cont = c("cac.m-con.m", "cac.w-con.w",
+#' dea_MetabMC <- dea(norm_data_MetabMC, cont = c("cac.m-con.m", "cac.w-con.w",
 #'                    "(cac.m-con.m)-(cac.w-con.w)"), name = c("CACvsCON.M",
 #'                    "CACvsCON.W", "INT"), adjmethod = "BY", pvalcoff = 0.1,
 #'                    dtmethod = "separate")
-#' DEA_MetabMC
+#' dea_MetabMC
 
 dea <- function(object, cont = NULL, name = NULL, maxanal = NULL, adjmethod = "BH",
                 pvalcoff = NULL, dtmethod = "separate") {
