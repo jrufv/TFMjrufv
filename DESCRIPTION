@@ -20,12 +20,30 @@ RoxygenNote: 7.1.1
 biocViews:
 Imports: 
     BiocManager,
+    dplyr,
     ggplot2,
     ggrepel,
     gplots,
     graphics,
     grDevices,
+    methods,
     pheatmap,
     RColorBrewer,
     reshape,
-    utils
+    utils,
+Depends:
+    AnnotationDbi,
+    Biobase,
+    BiocGenerics,
+    edgeR,
+    genefilter,
+    limma,
+    MSnbase,
+    SummarizedExperiment,
+    oligo,
+    oligoClasses,
+    pmp,
+    POMA,
+    ReactomePA,
+    S4Vectors,
+    xcms
