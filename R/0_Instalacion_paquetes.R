@@ -9,9 +9,9 @@
 #' ins_pack()
 
 ins_pack <- function(annot_pack = NULL) {
-  packBioc <- c("AnnotationDbi", "Biobase", "edgeR", "genefilter", "MSnbase", "oligo",
-                "oligoClasses", "pmp", "POMA", "S4Vectors", "SummarizedExperiment",
-                "xcms", annot_pack)
+  packBioc <- c("AnnotationDbi", "Biobase", "BiocGenerics", "edgeR", "genefilter",
+                "limma", "MSnbase", "oligo", "oligoClasses", "pmp", "POMA", "ReactomePA",
+                "S4Vectors", "SummarizedExperiment", "xcms", annot_pack)
 
   for(i in 1:length(packBioc)) {
     if(!(require(packBioc[i], character.only = TRUE)))
