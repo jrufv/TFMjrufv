@@ -45,41 +45,41 @@
 #' @examples
 #' # Para microarrays
 #' data_microarray <- read_data(data_type = "microarray",
-#'                              path = "./data/microarray",
-#'                              targets = "./data/microarray/targets.csv",
+#'                              path = "./inst/extdata/microarray",
+#'                              targets = "./inst/extdata/microarray/targets.csv",
 #'                              sep_targ = ";")
 #' data_microarray
 #'
 #' # Para RNA-Seq
 #' data_RNASeq <- read_data(data_type = "RNA-Seq",
-#'                          raw_data = "./data/RNA-Seq/counts.csv",
+#'                          raw_data = "./inst/extdata/RNA-Seq/counts.csv",
 #'                          sep_rd = "\t",
-#'                          targets = "./data/RNA-Seq/targets.csv",
+#'                          targets = "./inst/extdata/RNA-Seq/targets.csv",
 #'                          sep_targ = ",")
 #' data_RNASeq
 #'
 #' # Para Espectros Brutos de GC/LC-MS
 #' data_MetabRS <- read_data(data_type = "MetabRS",
-#'                           path = "./data/Met_mzML",
+#'                           path = "./inst/extdata/Met_mzML",
 #'                           file_type = ".mzML",
-#'                           targets = "./data/Met_mzML/targets.csv",
+#'                           targets = "./inst/extdata/Met_mzML/targets.csv",
 #'                           sep_targ = ";",
 #'                           mode = "onDisk")
 #' data_MetabRS
 #'
 #' # Para Contenedores de Espectros de MS/NMR
 #' data_MetabSB <- read_data(data_type = "MetabSB",
-#'                           raw_data = "./data/Met_spectra_bins/spectra.csv",
+#'                           raw_data = "./inst/extdata/Met_spectra_bins/spectra.csv",
 #'                           sep_rd = ",",
-#'                           targets = "./data/Met_spectra_bins/targets.csv",
+#'                           targets = "./inst/extdata/Met_spectra_bins/targets.csv",
 #'                           sep_targ = ",")
 #' data_MetabSB
 #'
 #' # Para Concentraciones de Metabolitos
 #' data_MetabMC <- read_data(data_type = "MetabMC",
-#'                          raw_data = "./data/Met_conc/concent.csv",
+#'                          raw_data = "./inst/extdata/Met_conc/concent.csv",
 #'                          sep_rd = ",",
-#'                          targets = "./data/Met_conc/targets.csv",
+#'                          targets = "./inst/extdata/Met_conc/targets.csv",
 #'                          sep_targ = ",")
 #' data_MetabMC
 
