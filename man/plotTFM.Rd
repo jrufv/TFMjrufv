@@ -7,9 +7,9 @@
 plotTFM(object, plot)
 }
 \arguments{
-\item{object}{Objeto del tipo \code{ExpressionFeatureSet}, \code{DGEList},
-\code{OnDiskMSnExp}, \code{MSnExp}, \code{SummarizedExperiment} o
-\code{MSnSet}.}
+\item{object}{Objeto del tipo \code{ExpressionFeatureSet},
+\code{ExpressionSet}, \code{DGEList}, \code{OnDiskMSnExp}, \code{MSnExp},
+\code{SummarizedExperiment} o \code{MSnSet}.}
 
 \item{plot}{Tipo de gráfico. Puede ser \code{"PCA"} para gráfico de
 componentes principales, \code{"boxplot"} para diagramas de caja,
@@ -24,9 +24,9 @@ Un gráfico distinto en función de la selección realizada.
 }
 \description{
 Realiza diferentes tipos de gráficos en función del objeto introducido.
-Acepta objetos del tipo \code{ExpressionFeatureSet}, \code{DGEList},
-\code{OnDiskMSnExp}, \code{MSnExp}, \code{SummarizedExperiment} o
-\code{MSnSet}.
+Acepta objetos del tipo \code{ExpressionFeatureSet}, \code{ExpressionSet},
+\code{DGEList}, \code{OnDiskMSnExp}, \code{MSnExp},
+\code{SummarizedExperiment} o \code{MSnSet}.
 }
 \examples{
 plotTFM(object, plot = c("PCA", "boxplot", "heatmap", "barplot", "BPC",
