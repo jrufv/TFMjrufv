@@ -7,7 +7,7 @@
 read_data(
   data_type,
   path,
-  gz_file = FALSE,
+  gz_file,
   file_type,
   raw_data,
   sep_rd = "",
