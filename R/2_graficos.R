@@ -1,12 +1,12 @@
 #' Gráficos
 #'
 #' Realiza diferentes tipos de gráficos en función del objeto introducido.
-#' Acepta objetos del tipo \code{ExpressionFeatureSet}, \code{DGEList},
-#' \code{OnDiskMSnExp}, \code{MSnExp}, \code{SummarizedExperiment} o
-#' \code{MSnSet}.
-#' @param object Objeto del tipo \code{ExpressionFeatureSet}, \code{DGEList},
-#'   \code{OnDiskMSnExp}, \code{MSnExp}, \code{SummarizedExperiment} o
-#'   \code{MSnSet}.
+#' Acepta objetos del tipo \code{ExpressionFeatureSet}, \code{ExpressionSet},
+#' \code{DGEList}, \code{OnDiskMSnExp}, \code{MSnExp},
+#' \code{SummarizedExperiment} o \code{MSnSet}.
+#' @param object Objeto del tipo \code{ExpressionFeatureSet},
+#'   \code{ExpressionSet}, \code{DGEList}, \code{OnDiskMSnExp}, \code{MSnExp},
+#'   \code{SummarizedExperiment} o \code{MSnSet}.
 #' @param plot Tipo de gráfico. Puede ser \code{"PCA"} para gráfico de
 #'   componentes principales, \code{"boxplot"} para diagramas de caja,
 #'   \code{"heatmap"} para un mapa de calor de la varianza de genes,
@@ -22,7 +22,7 @@
 
 plotTFM <- function (object, plot) {
 
-  if(class(object) == "ExpressionFeatureSet") {
+  if(class(object) == "ExpressionFeatureSet" | class(object) == "ExpressionSet") {
     dat_mat <- Biobase::exprs(object)
     Groups <- Biobase::pData(object)[[2]]
     labels <- Biobase::sampleNames(object)
