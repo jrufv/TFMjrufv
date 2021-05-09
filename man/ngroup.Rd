@@ -13,9 +13,10 @@ ngroup(object)
 Numérico (número de grupos experimentales).
 }
 \description{
-Devuelve el número de grupos experimentales de objetos \code{ExpressionFeatureSet},
-\code{DGEList}, \code{OnDiskMSnExp}, \code{MSnExp},
-\code{SummarizedExperiment} y \code{MSnSet}.
+Devuelve el número de grupos experimentales de objetos
+\code{ExpressionFeatureSet}, \code{ExpressionSet}, \code{DGEList},
+\code{OnDiskMSnExp}, \code{MSnExp}, \code{SummarizedExperiment} y
+\code{MSnSet}.
 }
 \examples{
 ngroup(data_microarray)
