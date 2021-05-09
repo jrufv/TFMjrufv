@@ -14,8 +14,9 @@ vector de caracteres (colores).
 }
 \description{
 Genera un vector de colores por muestra para objetos
-\code{ExpressionFeatureSet}, \code{DGEList}, \code{OnDiskMSnExp},
-\code{MSnExp}, \code{SummarizedExperiment} y \code{MSnSet}.
+\code{ExpressionFeatureSet}, \code{ExpressionSet}, \code{DGEList},
+\code{OnDiskMSnExp}, \code{MSnExp}, \code{SummarizedExperiment} y
+\code{MSnSet}.
 }
 \examples{
 col_vect(data_microarray)
