@@ -22,12 +22,20 @@
 
 plotTFM <- function (object, plot) {
 
-  if(class(object) == "ExpressionFeatureSet" | class(object) == "ExpressionSet") {
+  if(class(object) == "ExpressionFeatureSet") {
     dat_mat <- Biobase::exprs(object)
     Groups <- Biobase::pData(object)[[2]]
     labels <- Biobase::sampleNames(object)
     name <- Biobase::varLabels(object)[2]
     lev <- levels(as.factor(Biobase::pData(object)[[2]]))
+    title <- "Microarrays"
+    value <- "Expression"
+  } else if(class(object) == "ExpressionSet") {
+    dat_mat <- Biobase::exprs(object)
+    Groups <- Biobase::pData(object)[[1]]
+    labels <- Biobase::sampleNames(object)
+    name <- Biobase::varLabels(object)[1]
+    lev <- levels(as.factor(Biobase::pData(object)[[1]]))
     title <- "Microarrays"
     value <- "Expression"
   } else if(class(object) == "DGEList") {
@@ -67,7 +75,16 @@ plotTFM <- function (object, plot) {
     value <- "Concentration"
   }
 
-  datacpm <- edgeR::cpm(dat_mat, log = TRUE)
+  if(class(object) == "ExpressionSet") {
+    if(min(exprs(object)) < 0) {
+      datacpm <- dat_mat
+    } else {
+      datacpm <- edgeR::cpm(dat_mat, log = TRUE)
+    }
+  } else {
+    datacpm <- edgeR::cpm(dat_mat, log = TRUE)
+  }
+
   meltdatacpm <- reshape::melt(datacpm)
   meltdatacpm <- data.frame(meltdatacpm, condition = cond_vect(object))
   meltdatacpm <- meltdatacpm[,-1]
@@ -184,8 +201,9 @@ plotTFM <- function (object, plot) {
 #' Vector de colores
 #'
 #' Genera un vector de colores por muestra para objetos
-#' \code{ExpressionFeatureSet}, \code{DGEList}, \code{OnDiskMSnExp},
-#' \code{MSnExp}, \code{SummarizedExperiment} y \code{MSnSet}.
+#' \code{ExpressionFeatureSet}, \code{ExpressionSet}, \code{DGEList},
+#' \code{OnDiskMSnExp}, \code{MSnExp}, \code{SummarizedExperiment} y
+#' \code{MSnSet}.
 #' @param object Objeto.
 #' @return vector de caracteres (colores).
 #' @export
@@ -196,6 +214,9 @@ col_vect <- function(object) {
   if(class(object) == "ExpressionFeatureSet") {
     vector <- Biobase::pData(object)[[2]]
     factor <- as.factor(vector)
+  } else if(class(object) == "ExpressionSet") {
+    vector <- as.character(Biobase::pData(object)[[1]])
+    factor <- as.factor(Biobase::pData(object)[[1]])
   } else if(class(object) == "DGEList") {
     factor <- object$samples$group
     vector <- as.character(factor)
@@ -223,9 +244,9 @@ col_vect <- function(object) {
 #' Vector de condición
 #'
 #' Crear un vector con el grupo experimental para cada muestra y compuesto a
-#' partir de objetos \code{ExpressionFeatureSet}, \code{DGEList},
-#' \code{OnDiskMSnExp}, \code{MSnExp}, \code{SummarizedExperiment} o
-#' \code{MSnSet}.
+#' partir de objetos \code{ExpressionFeatureSet}, \code{ExpressionSet},
+#' \code{DGEList}, \code{OnDiskMSnExp}, \code{MSnExp},
+#' \code{SummarizedExperiment} o \code{MSnSet}.
 #' @param object Objeto.
 #' @return Vector de caracteres (condición experimental).
 #' @export
@@ -237,6 +258,9 @@ cond_vect <- function(object) {
   if(class(object) == "ExpressionFeatureSet") {
     datos <- Biobase::exprs(object)
     grupos <- Biobase::pData(object)[[2]]
+  } else if(class(object) == "ExpressionSet") {
+    datos <- Biobase::exprs(object)
+    grupos <- as.character(Biobase::pData(object)[[1]])
   } else if(class(object) == "DGEList") {
     datos <- object$counts
     grupos <- as.character(object$samples$group)
@@ -261,9 +285,10 @@ cond_vect <- function(object) {
 
 #' Grupos experimentales
 #'
-#' Devuelve el número de grupos experimentales de objetos \code{ExpressionFeatureSet},
-#' \code{DGEList}, \code{OnDiskMSnExp}, \code{MSnExp},
-#' \code{SummarizedExperiment} y \code{MSnSet}.
+#' Devuelve el número de grupos experimentales de objetos
+#' \code{ExpressionFeatureSet}, \code{ExpressionSet}, \code{DGEList},
+#' \code{OnDiskMSnExp}, \code{MSnExp}, \code{SummarizedExperiment} y
+#' \code{MSnSet}.
 #' @param object Objeto.
 #' @return Numérico (número de grupos experimentales).
 #' @export
@@ -273,6 +298,8 @@ cond_vect <- function(object) {
 ngroup <- function(object) {
   if(class(object) == "ExpressionFeatureSet") {
     groups <- length(levels(as.factor(Biobase::pData(object)[[2]])))
+  } else if(class(object) == "ExpressionSet") {
+    groups <- length(levels(as.factor(Biobase::pData(object)[[1]])))
   } else if(class(object) == "DGEList") {
     groups <- length(levels(object$samples[[1]]))
   } else if(class(object) == "OnDiskMSnExp" | class(object) ==  "MSnExp") {
