@@ -265,7 +265,7 @@ prep_metRS <- function(object, fCPmethod = NULL, refineRT = FALSE, refineIn = FA
 
   # Generar objeto MSnSet
   data <- MSnbase::quantify(data)
-  data <- MSnbase::as(data, "MSnSet")
+  data <- methods::as(data, "MSnSet")
   Biobase::pData(data) <- Biobase::pData(data)[3:ncol(Biobase::pData(data))]
 
   return(data)
@@ -407,7 +407,7 @@ prep_metSB <- function(object, filterMV = TRUE, filterF = TRUE, filterRSD = TRUE
   save(data, file = paste0("./Results/prep_data_MetabSB_", Sys.time(), ".RData"))
 
   # Generar objeto MSnSet
-  data <- MSnbase::as(data, "MSnSet")
+  data <- methods::as(data, "MSnSet")
 
   return(data)
 
@@ -495,7 +495,7 @@ met_imp_norm <- function(object, impute = TRUE, coff = 20, immethod = "none",
   save(data, file = paste0("./Results/norm_Metab_", Sys.time(), ".RData"))
 
   # Generar objeto ExpressionSet
-  data <- MSnbase::as(data, "ExpressionSet")
+  data <- methods::as(data, "ExpressionSet")
 
   return(data)
 
