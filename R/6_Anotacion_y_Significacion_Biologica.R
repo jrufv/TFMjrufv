@@ -52,7 +52,7 @@ annotated <- function(listOfTabs, annotPackage, maPackage, ID) {
     }
 
     annotTopTab <- merge(x = geneAnots, y = IDtopTab, by.x = ID, by.y = ID)
-    annotTopTab <- dplyr::arrange(annotTopTab, adj.P.Val)
+    annotTopTab <- dplyr::arrange(annotTopTab, annotTopTab$adj.P.Val)
 
     listOfTabs[[i]] <- annotTopTab
 
