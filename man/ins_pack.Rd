@@ -10,7 +10,7 @@ ins_pack(annot_pack = NULL)
 \item{annot_pack}{Paquetes de anotaciones para los datos del análisis.}
 }
 \value{
-
+Vacío.
 }
 \description{
 Instala y carga los paquetes de Bioconductor necesarios para el correcto
