@@ -20,11 +20,12 @@ knitr::opts_chunk$set(
 
 Este paquete pretende crear un *pipeline* que permita realizar un análisis estadístico completo de diferentes tipos de datos ómicos.
 
-## Installation
+## Instalación
 
 Puede instalar la versión en desarrollo desde [GitHub](https://github.com) con:
 
-``` r
+```{r}
+install.packages("devtools")
 library(devtools)
 devtools::install_github("jrufv/TFMjrufv")
 ```
@@ -34,7 +35,7 @@ devtools::install_github("jrufv/TFMjrufv")
 ### 1.1 Carga de paquetes de Bioconductor
 En primer lugar usamos la función `ins_pack()` para instalar (en caso necesario) y cargar los paquetes de Bioconductor necesarios. Además podemos añadir el paquete de anotaciones que usaremos durante el análisis.
 
-``` r
+```{r}
 library(TFMjrufv)
 ins_pack(annot_pack = "hgu133a.db")
 ```
@@ -42,7 +43,7 @@ ins_pack(annot_pack = "hgu133a.db")
 ### 1.2 Lectura de datos
 Los datos los tenemos almacenados en archivos .CEL (uno por muestra). Además debemos crear un archivo de texto en el que indicaremos las características de cada muestra para poder realizar el análisis.
 
-``` r
+```{r}
 data_microarray <- read_data(data_type = "microarray",
                              path = "./data/microarray",
                              targets = "./data/microarray/targets.csv",
@@ -54,7 +55,7 @@ pData(data_microarray)
 ### 1.3 Visualización de los dato brutos
 La función `plotTFM()` permite visualizar diferentes gráficos.
 
-``` r
+```{r}
 plotTFM(data_microarray, plot = "boxplot")
 plotTFM(data_microarray, plot = "density")
 plotTFM(data_microarray, plot = "PCA")
@@ -65,7 +66,7 @@ plotTFM(data_microarray, plot = "heatmapS")
 ### 1.4 Preprocesamiento y normalizacion
 La función `prep_norm_microarray()` permite realizar el filtraje no específico de los datos mediante los argumentos `varFilter` y `featureFilter`, y posteriormente realiza la normalización de los datos.
 
-``` r
+```{r}
 norm_data_microarray <- prep_norm_microarray(data_microarray,
                                              varFilter = TRUE,
                                              featureFilter = TRUE,
@@ -76,7 +77,7 @@ head(exprs(norm_data_microarray))
 ### 1.5 Visualización de los datos normalizados
 Una vez se han normalizado los datos se pueden comparar los gráficos antes y después de la normalización.
 
-``` r
+```{r}
 plotTFM(norm_data_microarray, plot = "boxplot")
 plotTFM(norm_data_microarray, plot = "density")
 plotTFM(norm_data_microarray, plot = "PCA")
@@ -87,7 +88,7 @@ plotTFM(norm_data_microarray, plot = "heatmapS")
 ### 1.6 Análisis de expresión diferencial
 La función `dea()` realiza un análisis de expresión diferencial basado en modelos lineales del paquete limma. El retorno de la funcion consta de una lista con un marco de datos para cada contraste realizado, una tabla que muestra la cantidad de analitos sobreexpresados e infraexpresados por contraste y un objeto TestResults que mantiene los analitos que han mostrado expresión diferencial en algún contraste. 
 
-``` r
+```{r}
 dea_microarray <- dea(norm_data_microarray, cont = "Treated-Untreated",
                       name = "TRvsUN", maxanal = 1000, adjmethod = "fdr",
                       pvalcoff = 0.1, dtmethod = "separate")
@@ -99,7 +100,7 @@ dea_microarray[[3]]
 ### 1.7 Anotación de resultados
 A continuacion se añaden las anotaciones de los genes seleccionados en cada contraste (en nuestro caso un unico contraste).
 
-``` r
+```{r}
 anot_dea_microarray <- annotated(dea_microarray, maPackage = "hgu133a.db",
                                  ID = "PROBEID")
 head(anot_dea_microarray[[1]])
@@ -108,7 +109,7 @@ head(anot_dea_microarray[[1]])
 ### 1.8 Análisis de significación biológica
 Finalmente podemos realizar el análisis de enriquecimiento para encontrar las vías que se expresan diferencialmente en cada contraste.
 
-``` r
+```{r}
 enRes_microarray <- bsa(anot_dea_microarray, GOPackage = "org.Hs.egGO",
                         PATHPackage = "org.Hs.egPATH", organism = "human",
                         pvcoff = 0.05, padmethod = "BH")
