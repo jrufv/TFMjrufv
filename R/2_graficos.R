@@ -76,7 +76,7 @@ plotTFM <- function (object, plot) {
   }
 
   if(class(object) == "ExpressionSet") {
-    if(min(exprs(object)) < 0) {
+    if(min(Biobase::exprs(object)) < 0) {
       datacpm <- dat_mat
     } else {
       datacpm <- edgeR::cpm(dat_mat, log = TRUE)
@@ -101,7 +101,7 @@ plotTFM <- function (object, plot) {
     pcdata <- data.frame(pcmat$x)
     loads <- round(pcmat$sdev^2/sum(pcmat$sdev^2)*100,1)
 
-    ggplot2::ggplot(pcdata, ggplot2::aes(x = PC1, y = PC2)) +
+    ggplot2::ggplot(pcdata, ggplot2::aes(x = pcdata$PC1, y = pcdata$PC2)) +
       ggplot2::theme_bw() +
       ggplot2::geom_hline(yintercept = 0, color = "gray70") +
       ggplot2::geom_vline(xintercept = 0, color = "gray70") +
@@ -116,8 +116,8 @@ plotTFM <- function (object, plot) {
 
   } else if(plot == "boxplot") {
 
-    ggplot2::ggplot(meltdatacpm, ggplot2::aes(x = samples, y = value,
-                                              fill = condition)) +
+    ggplot2::ggplot(meltdatacpm, ggplot2::aes(x = meltdatacpm$samples, y = value,
+                                              fill = meltdatacpm$condition)) +
       ggplot2::theme_bw() +
       ggplot2::geom_boxplot(notch = TRUE) +
       ggplot2::labs(x = "Samples", y = paste(value, "(cpm)", sep = " ")) +
@@ -128,7 +128,7 @@ plotTFM <- function (object, plot) {
 
   } else if(plot == "heatmap") {
 
-    var_rows <- apply(datacpm, 1, var)
+    var_rows <- apply(datacpm, 1, stats::var)
     if(nrow(datacpm) > 1000) n = 500 else n = nrow(datacpm) * 0.25
     select_var <- names(sort(var_rows, decreasing = TRUE))[1:n]
     datacpm <- datacpm[select_var,]
@@ -148,11 +148,12 @@ plotTFM <- function (object, plot) {
                                 group = Groups)
 
       ggplot2::ggplot(datalibsize,
-                      ggplot2::aes(x = samples, y = lib.size, fill = group)) +
+                      ggplot2::aes(x = datalibsize$samples,y = datalibsize$lib.size,
+                                   fill = datalibsize$group)) +
         ggplot2::theme_bw() +
         ggplot2::geom_bar(stat = "identity", width = 0.5) +
-        ggplot2::geom_text(ggplot2::aes(label = lib.size), vjust = 1.5, color = "white",
-                           size = 3.5) +
+        ggplot2::geom_text(ggplot2::aes(label = datalibsize$lib.size),vjust = 1.5,
+                           color = "white", size = 3.5) +
         ggplot2::labs(x = "Samples", y = "Library size") +
         ggplot2::ggtitle("Tamaño de librería por muestra para: RNA-Seq") +
         ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5)) +
@@ -182,11 +183,11 @@ plotTFM <- function (object, plot) {
                       srtCol = 0, adjCol = 0.5,
                       main = paste("Heatmap de muestras para:", title, sep = " "),
                       xlab = "Samples", dendrogram = "col")
-    legend("bottomleft", fill = grDevices::topo.colors(ngroup(object)), legend = lev)
+    graphics::legend("bottomleft", fill = grDevices::topo.colors(ngroup(object)), legend = lev)
 
   } else if(plot == "density") {
 
-    ggplot2::ggplot(meltdata, ggplot2::aes(x = value, color = condition)) +
+    ggplot2::ggplot(meltdata, ggplot2::aes(x = value, color = meltdata$condition)) +
       ggplot2::theme_bw() +
       ggplot2::geom_density() +
       ggplot2::labs(x = value, y = "Density") +
