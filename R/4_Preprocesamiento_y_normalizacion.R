@@ -57,14 +57,6 @@ prep_norm_microarray <- function(object, varFilter = TRUE, featureFilter = TRUE,
 
   } else data <- norm_obj
 
-  # Guardar datos de expresión y objeto
-  utils::write.csv(Biobase::exprs(data),
-                   file = paste0("./Results/norm_data_microarray_", Sys.time(), ".csv"))
-
-  Biobase::pData(data) <- Biobase::pData(data)[2:ncol(Biobase::pData(data))]
-
-  save(data, file = paste0("./Results/norm_data_microarray_", Sys.time(), ".RData"))
-
   return(data)
 
 }
@@ -102,17 +94,10 @@ prep_norm_rna <- function(object, usFilter = TRUE, ...) {
   # Normalización
   data <- edgeR::calcNormFactors(filt_obj)
 
-  # Guardar datos de expresión
-  utils::write.csv(data$counts,
-                   file = paste0("./Results/norm_data_RNASeq_", Sys.time(), ".csv"))
-
   # Generar objeto ExpressionSet
   data <- Biobase::ExpressionSet(assayData = data$counts,
                                  phenoData = Biobase::AnnotatedDataFrame(data$samples))
   Biobase::varLabels(data)[1] <- "Group"
-
-  # Guardar objeto
-  save(data, file = paste0("./Results/norm_data_RNASeq_", Sys.time(), ".RData"))
 
   return(data)
 
@@ -254,15 +239,6 @@ prep_metRS <- function(object, fCPmethod = NULL, refineRT = FALSE, refineIn = FA
                                  param = fill_method)
   } else data <- corr_alig_refi_find_obj
 
-  # Guardar datos de expresión
-  data_save <- xcms::featureValues(data)
-  colnames(data_save) <- Biobase::pData(data)[[2]]
-  utils::write.csv(data_save,
-                   file = paste0("./Results/prep_data_MetabRS_", Sys.time(), ".csv"))
-
-  # Guardar objeto
-  save(data, file = paste0("./Results/prep_data_MetabRS_", Sys.time(), ".RData"))
-
   # Generar objeto MSnSet
   data <- MSnbase::quantify(data)
   data <- methods::as(data, "MSnSet")
@@ -294,7 +270,8 @@ prep_metRS <- function(object, fCPmethod = NULL, refineRT = FALSE, refineIn = FA
 #'   de control de calidad. Para \code{filterB = TRUE}, Si el parámetro QClab no
 #'   es NULL, se utilizarán muestras de control de calidad para calcular la
 #'   intensidad de la señal media.
-#' @param mrsd Numérico, valor umbral del %%RSD del control de calidad.
+#' @param mrsd Numérico, valor umbral del porcentaje de RSD del control de
+#'   calidad.
 #' @param mfc Numérico, fold change mínimo entre muestras analíticas y en
 #'   blanco.
 #' @param Blab Carácter, etiqueta de clase utilizada para identificar muestras
@@ -302,8 +279,8 @@ prep_metRS <- function(object, fCPmethod = NULL, refineRT = FALSE, refineIn = FA
 #' @param remB Lógico, si es TRUE se eliminarán las muestras en blanco.
 #' @param fib Numérico, valor entre 0 y 1 de la fracción de picos en blanco en
 #'   las que deben estar presentes.
-#' @return Un objeto de la clase \code{MSnSet} que contiene los
-#'   datos resultantes del preprocesamiento aplicado
+#' @return Un objeto de la clase \code{MSnSet} que contiene los datos
+#'   resultantes del preprocesamiento aplicado
 #' @export
 #' @examples
 #' prep_data_MetabSB <- prep_metSB(data_MetabSB, filterMV = TRUE, mpmv = 0.1,
@@ -399,13 +376,6 @@ prep_metSB <- function(object, filterMV = TRUE, filterF = TRUE, filterRSD = TRUE
 
   } else data <- fRSD_filF_fimv_obj
 
-  # Guardar datos
-  utils::write.csv(SummarizedExperiment::assay(data),
-                   file = paste0("./Results/prep_data_MetabSB_", Sys.time(), ".csv"))
-
-  # Guardar objeto
-  save(data, file = paste0("./Results/prep_data_MetabSB_", Sys.time(), ".RData"))
-
   # Generar objeto MSnSet
   data <- methods::as(data, "MSnSet")
 
@@ -485,14 +455,6 @@ met_imp_norm <- function(object, impute = TRUE, coff = 20, immethod = "none",
                                type = oumethod)
 
   } else data <- norm_impu_obj
-
-
-  # Guardar datos
-  utils::write.csv(Biobase::exprs(data),
-                   file = paste0("./Results/norm_Metab_", Sys.time(), ".csv"))
-
-  # Guardar objeto
-  save(data, file = paste0("./Results/norm_Metab_", Sys.time(), ".RData"))
 
   # Generar objeto ExpressionSet
   data <- methods::as(data, "ExpressionSet")
