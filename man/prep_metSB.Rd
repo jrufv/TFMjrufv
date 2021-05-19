@@ -46,7 +46,8 @@ de control de calidad. Para \code{filterB = TRUE}, Si el parámetro QClab no
 es NULL, se utilizarán muestras de control de calidad para calcular la
 intensidad de la señal media.}
 
-\item{mrsd}{Numérico, valor umbral del \%\%RSD del control de calidad.}
+\item{mrsd}{Numérico, valor umbral del porcentaje de RSD del control de
+calidad.}
 
 \item{mfc}{Numérico, fold change mínimo entre muestras analíticas y en
 blanco.}
@@ -60,8 +61,8 @@ en blanco.}
 las que deben estar presentes.}
 }
 \value{
-Un objeto de la clase \code{MSnSet} que contiene los
-datos resultantes del preprocesamiento aplicado
+Un objeto de la clase \code{MSnSet} que contiene los datos
+resultantes del preprocesamiento aplicado
 }
 \description{
 Realiza el preprocesamiento de contenedores de espectros de MS o NMR
