@@ -45,9 +45,10 @@ Los datos los tenemos almacenados en archivos .CEL (uno por muestra). Además de
 
 ```{r}
 data_microarray <- read_data(data_type = "microarray",
-                             path = "./data/microarray",
-                             targets = "./data/microarray/targets.csv",
-                             sep_targ = ";")
+                             path = "./inst/extdata/microarray",
+                             targets = "./inst/extdata/microarray/targets.csv",
+                             sep_targ = ";",
+                             gz_file = FALSE)
 head(exprs(data_microarray))
 pData(data_microarray)
 ```
@@ -110,8 +111,8 @@ head(anot_dea_microarray[[1]])
 Finalmente podemos realizar el análisis de enriquecimiento para encontrar las vías que se expresan diferencialmente en cada contraste.
 
 ```{r}
-enRes_microarray <- bsa(anot_dea_microarray, GOPackage = "org.Hs.egGO",
-                        PATHPackage = "org.Hs.egPATH", organism = "human",
+enRes_microarray <- bsa(anot_dea_microarray, GOPackage = org.Hs.egGO,
+                        PATHPackage = org.Hs.egPATH, organism = "human",
                         pvcoff = 0.05, padmethod = "BH")
 enRes_microarray
 ```
