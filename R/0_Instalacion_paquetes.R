@@ -15,10 +15,11 @@ ins_pack <- function(annot_pack = NULL) {
 
   for(i in 1:length(packBioc)) {
     if(!(require(packBioc[i], character.only = TRUE)))
-      BiocManager::install(packBioc[i])
+      BiocManager::install(packBioc[i], update = TRUE)
     library(packBioc[i], character.only = TRUE)
   }
 
   if(!require("TFMjrufv"))
-    devtools::install_github("jrufv/TFMjrufv")
+    devtools::install_github("jrufv/TFMjrufv", upgrade = "always")
+  library("TFMjrufv")
 }
