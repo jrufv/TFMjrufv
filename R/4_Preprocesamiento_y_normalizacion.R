@@ -23,8 +23,6 @@
 prep_norm_microarray <- function(object, varFilter = TRUE, featureFilter = TRUE,
                                  annot_pack = NULL, ...) {
 
-  dir.create("Results", showWarnings = FALSE)
-
   if(class(object) != "ExpressionFeatureSet") {
     stop("class object must be ExpressionFeatureSet")
   }
@@ -57,6 +55,9 @@ prep_norm_microarray <- function(object, varFilter = TRUE, featureFilter = TRUE,
 
   } else data <- norm_obj
 
+  Biobase::pData(data) <- Biobase::pData(data)[2:ncol(Biobase::pData(data))]
+  Biobase::varLabels(data)[1] <- "Group"
+
   return(data)
 
 }
@@ -79,8 +80,6 @@ prep_norm_microarray <- function(object, varFilter = TRUE, featureFilter = TRUE,
 #' norm_data_RNASeq
 
 prep_norm_rna <- function(object, usFilter = TRUE, ...) {
-
-  dir.create("Results", showWarnings = FALSE)
 
   if(class(object) != "DGEList") stop("class object must be DGEList")
 
@@ -145,8 +144,6 @@ prep_norm_rna <- function(object, usFilter = TRUE, ...) {
 prep_metRS <- function(object, fCPmethod = NULL, refineRT = FALSE, refineIn = FALSE,
                        refineMN = FALSE, aRtmethod = NULL, gCPmethod = NULL,
                        fillCP = FALSE, fillmethod = NULL, ...) {
-
-  dir.create("Results", showWarnings = FALSE)
 
   if(class(object) != "OnDiskMSnExp" & class(object) != "MSnExp") {
     stop("class object must be OnDiskMSnExp or MSnExp")
@@ -293,8 +290,6 @@ prep_metSB <- function(object, filterMV = TRUE, filterF = TRUE, filterRSD = TRUE
                        QClab = NULL, mrsd = NULL, mfc = NULL, Blab = NULL,
                        remB = TRUE, fib = 0) {
 
-  dir.create("Results", showWarnings = FALSE)
-
   if(class(object) != "SummarizedExperiment") {
     stop("class object must be SummarizedExperiment")
   }
@@ -423,8 +418,6 @@ met_imp_norm <- function(object, impute = TRUE, coff = 20, immethod = "none",
                          nomethod = "none", routliers = TRUE, oumethod = NULL,
                          ditype = "euclidean", ...) {
 
-  dir.create("Results", showWarnings = FALSE)
-
   if(class(object) != "MSnSet") stop("class object must be MSnSet")
 
   # Imputación de valores perdidos
@@ -458,6 +451,8 @@ met_imp_norm <- function(object, impute = TRUE, coff = 20, immethod = "none",
 
   # Generar objeto ExpressionSet
   data <- methods::as(data, "ExpressionSet")
+
+  Biobase::varLabels(data)[1] <- "Group"
 
   return(data)
 
