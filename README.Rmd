@@ -27,7 +27,8 @@ Puede instalar la versión en desarrollo desde [GitHub](https://github.com) con:
 ```{r}
 install.packages("devtools")
 library(devtools)
-devtools::install_github("jrufv/TFMjrufv")
+devtools::install_github("jrufv/TFMjrufv", upgrade = "always")
+library(TFMjrufv)
 ```
 
 ## Ejemplo 1. Datos de microarray
@@ -42,6 +43,8 @@ ins_pack(annot_pack = "hgu133a.db")
 
 ### 1.2 Lectura de datos
 Los datos los tenemos almacenados en archivos .CEL (uno por muestra). Además debemos crear un archivo de texto en el que indicaremos las características de cada muestra para poder realizar el análisis.
+
+Nota: Se recomienda cambiar el directorio de trabajo a la carpeta del paquete. De lo contrario deberá modificar los parámetros `path` y `targets` para especificar la ruta de archivo específica.
 
 ```{r}
 data_microarray <- read_data(data_type = "microarray",

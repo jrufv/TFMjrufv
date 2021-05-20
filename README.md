@@ -16,28 +16,29 @@ Puede instalar la versión en desarrollo desde
 
 ``` r
 install.packages("devtools")
-#> Installing package into '/tmp/RtmpQeelaT/temp_libpathc6f680931c8'
+#> Installing package into '/tmp/RtmpuK2pJA/temp_libpathbb25e2329c1'
 #> (as 'lib' is unspecified)
 library(devtools)
 #> Loading required package: usethis
-devtools::install_github("jrufv/TFMjrufv")
+devtools::install_github("jrufv/TFMjrufv", upgrade = "always")
 #> Downloading GitHub repo jrufv/TFMjrufv@HEAD
 #> 
-#>      checking for file ‘/tmp/RtmpD07OxN/remotes13eb775e5fe8/jrufv-TFMjrufv-dc2ea5c/DESCRIPTION’ ...  ✓  checking for file ‘/tmp/RtmpD07OxN/remotes13eb775e5fe8/jrufv-TFMjrufv-dc2ea5c/DESCRIPTION’
-#>   ─  preparing ‘TFMjrufv’: (539ms)
-#>      checking DESCRIPTION meta-information ...  ✓  checking DESCRIPTION meta-information
-#>   ─  checking for LF line-endings in source and make files and shell scripts
-#>   ─  checking for empty or unneeded directories
-#>        NB: this package now depends on R (>= 3.5.0)
-#>        WARNING: Added dependency on R >= 3.5.0 because serialized objects in
+#>      checking for file ‘/tmp/RtmpRmZGiT/remotesd8547f6840d/jrufv-TFMjrufv-143ca40/DESCRIPTION’ ...  ✓  checking for file ‘/tmp/RtmpRmZGiT/remotesd8547f6840d/jrufv-TFMjrufv-143ca40/DESCRIPTION’
+#>   ─  preparing ‘TFMjrufv’: (363ms)
+#>   ✓  checking DESCRIPTION meta-information
+#> ─  checking for LF line-endings in source and make files and shell scripts
+#> ─  checking for empty or unneeded directories
+#>      NB: this package now depends on R (>= 3.5.0)
+#>      WARNING: Added dependency on R >= 3.5.0 because serialized objects in
 #>      serialize/load version 3 cannot be read in older versions of R.
 #>      File(s) containing such objects:
 #>        ‘TFMjrufv/data/.RData’
 #> ─  building ‘TFMjrufv_0.0.0.9000.tar.gz’
 #>      
 #> 
-#> Installing package into '/tmp/RtmpQeelaT/temp_libpathc6f680931c8'
+#> Installing package into '/tmp/RtmpuK2pJA/temp_libpathbb25e2329c1'
 #> (as 'lib' is unspecified)
+library(TFMjrufv)
 ```
 
 ## Ejemplo 1. Datos de microarray
@@ -221,6 +222,10 @@ ins_pack(annot_pack = "hgu133a.db")
 Los datos los tenemos almacenados en archivos .CEL (uno por muestra).
 Además debemos crear un archivo de texto en el que indicaremos las
 características de cada muestra para poder realizar el análisis.
+
+Nota: Se recomienda cambiar el directorio de trabajo a la carpeta del
+paquete. De lo contrario deberá modificar los parámetros `path` y
+`targets` para especificar la ruta de archivo específica.
 
 ``` r
 data_microarray <- read_data(data_type = "microarray",
