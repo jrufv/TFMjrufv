@@ -76,7 +76,8 @@ objeto en el que almacenar los datos de los ensayos y las muestras.
 data_microarray <- read_data(data_type = "microarray",
                              path = "./inst/extdata/microarray",
                              targets = "./inst/extdata/microarray/targets.csv",
-                             sep_targ = ";")
+                             sep_targ = ";",
+                             gz_file = FALSE)
 data_microarray
 
 # Para RNA-Seq
