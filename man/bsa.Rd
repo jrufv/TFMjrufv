@@ -34,14 +34,14 @@ Realiza el análisis de enriquecimiento mediante el paquete ReactomePA
 }
 \examples{
 # Para datos de microarrays
-enRes_microarray <- bsa(anot_dea_microarray, GOPackage = "org.Hs.egGO",
-                        PATHPackage = "org.Hs.egPATH", organism = "human",
+enRes_microarray <- bsa(anot_dea_microarray, GOPackage = org.Hs.egGO,
+                        PATHPackage = org.Hs.egPATH, organism = "human",
                         pvcoff = 0.05, padmethod = "BH")
 enRes_microarray
 
 # Para datos de RNA-Seq
-enRes_RNASeq <- bsa(anot_dea_RNASeq, GOPackage = "org.Hs.egGO",
-                    PATHPackage = "org.Hs.egPATH", organism = "human",
+enRes_RNASeq <- bsa(anot_dea_RNASeq, GOPackage = org.Hs.egGO,
+                    PATHPackage = org.Hs.egPATH, organism = "human",
                     pvcoff = 0.05, padmethod = "BH")
 enRes_RNASeq
 }
