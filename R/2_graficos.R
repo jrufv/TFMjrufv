@@ -36,7 +36,7 @@ plotTFM <- function (object, plot) {
     labels <- Biobase::sampleNames(object)
     name <- Biobase::varLabels(object)[1]
     lev <- levels(as.factor(Biobase::pData(object)[[1]]))
-    title <- "Microarrays"
+    title <- "Normalized data"
     value <- "Expression"
   } else if(class(object) == "DGEList") {
     dat_mat <- object$counts
